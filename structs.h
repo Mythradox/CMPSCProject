@@ -25,5 +25,19 @@ typedef struct
 	Vector2 location;
 	Vector2 dimensions;
 	Vector2 origin;
-	float rotation;
 } Sprite;
+
+typedef struct
+{
+	int up;
+	int right;
+	int left;
+} Input;
+
+typedef struct
+{
+	Sprite sprite;
+	float dX;
+	float dY;
+	float rotation;
+} Player;
