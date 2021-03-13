@@ -40,14 +40,5 @@ typedef struct
 {
 	Sprite sprite;
 	Vector2 delta;
+	int health;
 } Entity;
-
-typedef struct
-{
-	Entity entity;
-} Player;
-
-typedef struct
-{
-	int lifetime;
-} Bullet;
