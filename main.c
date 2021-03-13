@@ -141,7 +141,7 @@ int main(int argc, char *argv[])
 	player.delta.x = 0;
 	player.delta.y = 0;
 
-	shipFire.texture = LoadTexture("resources/ship_fire.png");
+	shipFire.texture = LoadTexture("resources/ship_exhaust.png");
 	shipFire.dimensions.x = 8;
 	shipFire.dimensions.y = 16;
 
