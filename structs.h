@@ -14,6 +14,14 @@ typedef struct
 
 typedef struct
 {
+	int up;
+	int right;
+	int left;
+	int space;
+} Input;
+
+typedef struct
+{
 	float x;
 	float y;
 } Vector2;
@@ -30,14 +38,16 @@ typedef struct
 
 typedef struct
 {
-	int up;
-	int right;
-	int left;
-} Input;
+	Sprite sprite;
+	Vector2 delta;
+} Entity;
 
 typedef struct
 {
-	Sprite sprite;
-	float dX;
-	float dY;
+	Entity entity;
 } Player;
+
+typedef struct
+{
+	int lifetime;
+} Bullet;

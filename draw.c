@@ -29,7 +29,7 @@ void Draw(Sprite sprite, bool centered)
 	if (centered)
 	{
 		rect.x -= (rect.w / 2);
-		rect. y-= (rect.h / 2);
+		rect.y -= (rect.h / 2);
 	}
 	SDL_RenderCopyEx(game.renderer, sprite.texture, NULL, &rect, sprite.rotation, NULL, 0);
 }

@@ -29,6 +29,8 @@ void KeyDown(SDL_KeyboardEvent *event)
 			case SDL_SCANCODE_D:
 				input.right = true;
 				break;
+			case SDL_SCANCODE_SPACE:
+				input.space = true;
 			default:
 				break;
 		}
@@ -59,6 +61,8 @@ void KeyUp(SDL_KeyboardEvent *event)
 			case SDL_SCANCODE_D:
 				input.right = false;
 				break;
+			case SDL_SCANCODE_SPACE:
+				input.space = false;
 			default:
 				break;
 		}
