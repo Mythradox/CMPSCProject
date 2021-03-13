@@ -23,7 +23,8 @@ extern void EventInput(void);
 
 const double ACCEL = 0.10;
 const double ROTATION_INC = 2.00;
-const double VELOCITY_MAX = 5.00;
+const double SHIP_VELOCITY_MAX = 5.00;
+const double BULLET_VELOCITY = 10.00;
 const double DEGREES_TO_RADIANS = (M_PI / 180);
 const double TWO_PI = 2 * M_PI;
 const double MAX_ROTATION = 360.00;
@@ -39,10 +40,10 @@ Sprite shipFire;
 
 Entity ShipVelocityCheck(Entity entity)
 {
-	entity.delta.x = entity.delta.x < -VELOCITY_MAX ? -VELOCITY_MAX : entity.delta.x;
-	entity.delta.x = entity.delta.x > VELOCITY_MAX ? VELOCITY_MAX : entity.delta.x;
-	entity.delta.y = entity.delta.y < -VELOCITY_MAX ? -VELOCITY_MAX : entity.delta.y;
-	entity.delta.y = entity.delta.y > VELOCITY_MAX ? VELOCITY_MAX : entity.delta.y;
+	entity.delta.x = entity.delta.x < -SHIP_VELOCITY_MAX ? -SHIP_VELOCITY_MAX : entity.delta.x;
+	entity.delta.x = entity.delta.x > SHIP_VELOCITY_MAX ? SHIP_VELOCITY_MAX : entity.delta.x;
+	entity.delta.y = entity.delta.y < -SHIP_VELOCITY_MAX ? -SHIP_VELOCITY_MAX : entity.delta.y;
+	entity.delta.y = entity.delta.y > SHIP_VELOCITY_MAX ? SHIP_VELOCITY_MAX : entity.delta.y;
 	return entity;
 }
 
@@ -106,8 +107,8 @@ void Update(void)
 		bullet.health = BULLET_LIFETIME;
 		bullet.sprite.location = player.sprite.location;
 		bullet.sprite.rotation = player.sprite.rotation;
-		bullet.delta.x = (player_sin * VELOCITY_MAX) + player.delta.x;
-		bullet.delta.y = -(player_cos * VELOCITY_MAX) + player.delta.y;
+		bullet.delta.x = (player_sin * BULLET_VELOCITY) + player.delta.x;
+		bullet.delta.y = -(player_cos * BULLET_VELOCITY) + player.delta.y;
 	}
 
 	player.sprite = BoundsCheck(player.sprite);
