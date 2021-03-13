@@ -20,9 +20,9 @@ extern void ClearBuffer(void);
 extern void PresentBuffer(void);
 extern void EventInput(void);
 
-const double ACCEL = 0.33;
+const double ACCEL = 0.10;
 const double ROTATION_INC = 2.00;
-const double VELOCITY_MAX = 3.00;
+const double VELOCITY_MAX = 5.00;
 const double DEGREES_TO_RADIANS = (M_PI / 180);
 const double TWO_PI = 2 * M_PI;
 
@@ -86,7 +86,6 @@ int main(int argc, char *argv[])
 		Draw(player.sprite, true);
 		PresentBuffer();
 		SDL_Delay(16);
-		printf("%.3f %s\n", player.sprite.rotation);
 	}
 	return 0;
 }
