@@ -1,13 +1,25 @@
+# CMPSCProject
+
 Asteroids-like game.
 
-Controls:
+# Dependencies
+
+- SDL2
+- SDL2_image
+- SDL2_mixer
+
+# Controls
 
 Up/W: Accelerate
 
 Left/A and Right/D: Change Rotation
 
-Build:
+Space: Dash!
+
+# Build
 
 cd [directory]
 
 make
+
+=)
