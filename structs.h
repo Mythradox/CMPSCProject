@@ -34,6 +34,7 @@ typedef struct
 	Vector2 dimensions;
 	Vector2 origin;
 	double rotation;
+	Uint8 alpha;
 } Sprite;
 
 typedef struct

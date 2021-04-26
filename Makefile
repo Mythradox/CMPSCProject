@@ -1,13 +1,13 @@
 # HEADERS
 HEAD = 
 # C FILES
-C = defs.h draw.c init.c input.c main.c structs.h
+C = defs.h draw.c init.c input.c main.c structs.h sprite.c sound.c ship.c
 #What compiler are you using?
 CC = gcc
 #What compiler flags are you using?
 COMPILER_FLAGS = -lm
 #What libraries are you linking?
-LINKER_FLAGS = -lSDL2 -lSDL2_image
+LINKER_FLAGS = -lSDL2 -lSDL2_image -lSDL2_mixer
 #What's the name of the executable?
 OBJ_NAME = test
 
