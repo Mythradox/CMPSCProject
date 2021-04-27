@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <math.h>
 
 #include "structs.h"
@@ -20,22 +21,40 @@ Sprite BoundsCheck(Sprite sprite)
         return sprite;
 }
 
-Sprite RotationCheck(Sprite sprite)
+double RotationCheck(double rotation)
 {
-        sprite.rotation = sprite.rotation < 0 ? MAX_ROTATION : sprite.rotation;
-        sprite.rotation = sprite.rotation > MAX_ROTATION ? 0 : sprite.rotation;
-       return sprite;
+	double newRotation = rotation;
+	newRotation = newRotation < 0 ? MAX_ROTATION : newRotation;
+	newRotation = newRotation > MAX_ROTATION ? 0 : newRotation;
+	return newRotation;
 }
 
-double GetSpriteSin(Sprite sprite)
+bool Contains(Sprite a, Sprite b)
 {
-        double spriteSin = sin(sprite.rotation * DEGREES_TO_RADIANS);
+	bool xContact = false;
+	bool yContact = false;
+	bool contact = false;
+	int halfAX = a.dimensions.x / 2;
+	int halfAY = a.dimensions.y / 2;
+	int halfBX = b.dimensions.x / 2;
+	int halfBY = b.dimensions.y / 2;
+	if (a.location.x - halfAX >= b.location.x - halfBX && a.location.x + halfAX <= b.location.x + halfBX)
+		xContact = true;
+	if (a.location.y - halfAY >= b.location.y - halfBY && a.location.y + halfAY <= b.location.y + halfBY)
+		yContact = true;
+	contact = xContact & yContact;
+	return  contact;
+}
+
+double GetSpriteSin(double rotation)
+{
+        double spriteSin = sin(rotation * DEGREES_TO_RADIANS);
         return spriteSin;
 }
 
-double GetSpriteCos(Sprite sprite)
+double GetSpriteCos(double rotation)
 {
-        double spriteCos = cos(sprite.rotation * DEGREES_TO_RADIANS);
+        double spriteCos = cos(rotation * DEGREES_TO_RADIANS);
         return spriteCos;
 }
 

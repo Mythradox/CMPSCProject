@@ -1,7 +1,7 @@
 # HEADERS
 HEAD = 
 # C FILES
-C = defs.h draw.c init.c input.c main.c structs.h sprite.c sound.c ship.c
+C = defs.h draw.c init.c input.c main.c structs.h sprite.c sound.c ship.c asteroid.c
 #What compiler are you using?
 CC = gcc
 #What compiler flags are you using?

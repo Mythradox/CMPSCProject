@@ -19,16 +19,27 @@ extern void ShipInitialize(void);
 extern void ShipUpdate(void);
 extern void ShipDraw(void);
 
+extern void AsteroidInitialize(void);
+extern void AsteroidUpdate(void);
+extern void AsteroidDraw(void);
+
 extern void InitializeAudio(void);
 extern void ShipSounds(void);
 
 Game game;
 Input input;
 
-void Update(void)
+void MainUpdate(void)
 {
 	EventInput();
 	ShipUpdate();
+	AsteroidUpdate();
+}
+
+void MainDraw(void)
+{
+	ShipDraw();
+	AsteroidDraw();
 }
 
 int main(int argc, char *argv[])
@@ -36,12 +47,12 @@ int main(int argc, char *argv[])
 	SDLInit();
 	InitializeAudio();
 	ShipInitialize();
-	
+	AsteroidInitialize();
 	while (true)
 	{
 		ClearBuffer();
-		Update();
-		ShipDraw();
+		MainUpdate();
+		MainDraw();
 		ShipSounds();
 		PresentBuffer();
 		SDL_Delay(16);

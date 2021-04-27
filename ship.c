@@ -2,13 +2,14 @@
 
 #include "defs.h"
 #include "structs.h"
+#include "enum.h"
 
 extern SDL_Texture* LoadTexture(char *filename);
 extern void Draw(Sprite sprite, bool centered);
-extern double GetSpriteSin(Sprite sprite);
-extern double GetSpriteCos(Sprite sprite);
+extern double GetSpriteSin(double rotation);
+extern double GetSpriteCos(double rotation);
 extern Sprite BoundsCheck(Sprite sprite);
-extern Sprite RotationCheck(Sprite sprite);
+extern double RotationCheck(double rotation);
 
 extern Input input;
 
@@ -23,9 +24,11 @@ const int DASH_MULTIPLIER = 10;
 
 int dashTimer;
 int dashCooldownTimer;
-bool isPropelling;
-bool isDashing;
+float dashStartX;
+float dashStartY;
 bool dashInitiated;
+enum ShipState state;
+
 Entity player;
 Sprite shipFire;
 
@@ -57,98 +60,102 @@ void ShipInitialize(void)
 
 	dashTimer = DASH_PERIOD;
 	dashCooldownTimer = 0;
-	isPropelling = false;
-	isDashing = false;
 	dashInitiated = false;
 }
 
 void ShipUpdate(void)
 {
-	// Accelerating
-	if (input.up)
-        {
-                double player_sin = GetSpriteSin(player.sprite);
-                double player_cos = -GetSpriteCos(player.sprite);
-                double dX = player_sin;
-                double dY = player_cos;
-                dX *= ACCEL;
-                dY *= ACCEL;
-                if (input.space)
-                {
-                        dX *= DASH_MULTIPLIER;
-                        dY *= DASH_MULTIPLIER;
-                }
-                player.delta.x += dX;
-                player.delta.y += dY;
-                shipFire.rotation = player.sprite.rotation;
-                shipFire.location.x = player.sprite.location.x - (player_sin * SHIP_RADIUS);
-                shipFire.location.y = player.sprite.location.y - (player_cos * SHIP_RADIUS);
-		isPropelling = true;
-        }
-	else
-		isPropelling = false;
-	// Rotate left
-        if (input.left)
-                player.sprite.rotation -= ROTATION_INC;
-	// Rotate right
-        if (input.right)
-                player.sprite.rotation += ROTATION_INC;
-
-	// During dash
-        if (isDashing)
-        {
-                if (dashTimer == DASH_PERIOD)
-                        dashInitiated = false;
-                if (dashTimer > 0)
-                        dashTimer--;
-                else if (dashTimer == 0)
-                {
-                        isDashing = false;
-                        player.sprite.alpha = 255;
-                        dashCooldownTimer = DASH_COOLDOWN;
-                }
-        }
+	switch (shipState)
+	{
+		case DASHING:
+			if (dashTimer == DASH_PERIOD)
+                		dashInitiated = false;
+                	if (dashTimer > 0)
+                        	dashTimer--;
+                	else if (dashTimer == 0)
+                	{
+				shipState = IDLE;
+                        	dashCooldownTimer = DASH_COOLDOWN;
+                	}
+			break;
+		default:
+			player = ShipVelocityCheck(player);
+			shipState = IDLE;
+        		if (input.left)
+                		player.sprite.rotation -= ROTATION_INC;
+        		if (input.right)
+                		player.sprite.rotation += ROTATION_INC;
+			if (input.up)
+        		{
+                		double player_sin = GetSpriteSin(player.sprite.rotation);
+                		double player_cos = -GetSpriteCos(player.sprite.rotation);
+                		double dX = player_sin;
+                		double dY = player_cos;
+                		dX *= ACCEL;
+                		dY *= ACCEL;
+                		player.delta.x += dX;
+                		player.delta.y += dY;
+                		shipFire.rotation = player.sprite.rotation;
+                		shipFire.location.x = player.sprite.location.x - (player_sin * SHIP_RADIUS);
+                		shipFire.location.y = player.sprite.location.y - (player_cos * SHIP_RADIUS);
+				shipState = PROPELLING;
+ 			}
+			if (input.space)
+        		{
+				if (dashCooldownTimer == 0)
+				{
+                			double playerSin = GetSpriteSin(player.sprite.rotation);
+                			double playerCos = -GetSpriteCos(player.sprite.rotation);
+                			double dX = playerSin;
+                			double dY = playerCos;
+					dX *= DASH_MULTIPLIER;
+                			dY *= DASH_MULTIPLIER;
+                			player.delta.x += dX;
+                			player.delta.y += dY;
+                			dashTimer = DASH_PERIOD;
+					dashInitiated = true;
+					shipState = DASHING;
+					dashStartX = player.sprite.location.x;
+					dashStartY = player.sprite.location.y;
+				}
+        		}	
+			break;
+	}
 
         if (dashCooldownTimer > 0)
                 dashCooldownTimer--;
 
-	// Initiate dash
-        if (input.space)
-        {
-		
-		if (dashCooldownTimer == 0 && !isDashing)
-		{
-                	double player_sin = GetSpriteSin(player.sprite);
-                	double player_cos = -GetSpriteCos(player.sprite);
-                	double dX = player_sin;
-                	double dY = player_cos;
-			dX *= DASH_MULTIPLIER;
-                	dY *= DASH_MULTIPLIER;
-                	player.delta.x += dX;
-                	player.delta.y += dY;
-                	dashTimer = DASH_PERIOD;
-			dashInitiated = true;
-			isDashing = true;
-			player.sprite.alpha = 128;
-		}
-        }
-	
         player.sprite = BoundsCheck(player.sprite);
-        player.sprite = RotationCheck(player.sprite);
-        
-	if (!isDashing)
-		player = ShipVelocityCheck(player);
-
+        player.sprite.rotation = RotationCheck(player.sprite.rotation);
         player.sprite.location.x += player.delta.x;
         player.sprite.location.y += player.delta.y;
 }
 
 void ShipDraw()
 {
+	switch (shipState)
+	{
+		case DASHING: ;
+			int afterImageCount = DASH_PERIOD - dashTimer;
+			int alphaIncrement = player.sprite.alpha / DASH_PERIOD;
+			for (int i = 0; i < afterImageCount; i++)
+			{
+				Sprite afterImage;
+				afterImage.texture = player.sprite.texture;
+				afterImage.alpha = alphaIncrement * i;
+				afterImage.rotation = player.sprite.rotation;
+				afterImage.location.x = dashStartX + (player.delta.x * i);
+				afterImage.location.y = dashStartY + (player.delta.y * i);
+				Draw(afterImage, true);
+			}
+			break;
+		case PROPELLING:
+			Draw(shipFire, true);
+			break;
+		default:
+			break;
+	}
 	Draw(player.sprite, true);
-	if (isPropelling)
-		Draw(shipFire, true);
-
 }
 
 
