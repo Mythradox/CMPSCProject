@@ -54,7 +54,7 @@ void SDLInit(void)
 		success = false;
 	}
 
-	game.window = SDL_CreateWindow("CMPSC Project", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, windowFlags);
+	game.window = SDL_CreateWindow("Dashteroids", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, windowFlags);
 
 	// Initialize window
 	if (!game.window)
@@ -82,4 +82,4 @@ void SDLQuit(void)
 	SDL_DestroyWindow(game.window);
 	AudioQuit();
 	SDL_Quit();
-}
+}	

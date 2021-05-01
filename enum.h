@@ -2,8 +2,8 @@ enum ShipState
 {
 	IDLE,
 	PROPELLING,
-	DASHING
+	DASHING,
+	DEATH
 };
-
 
 extern enum ShipState shipState;

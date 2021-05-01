@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #include "structs.h"
 
 extern Game game;
@@ -33,6 +34,15 @@ void Draw(Sprite sprite, bool centered)
 	}
 	SDL_SetTextureAlphaMod(sprite.texture, sprite.alpha);
 	SDL_RenderCopyEx(game.renderer, sprite.texture, NULL, &rect, sprite.rotation, NULL, 0);
+}
+
+void DrawText(Vector2 location, int r, int g, int b, char* format, ...)
+{
+	
+
+
+
+
 }
 
 void ClearBuffer(void)
